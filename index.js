@@ -59,10 +59,10 @@
     function timer() {
       const now = new Date();
       const diff = now - startTime;
-      title.text(diff/1000);
+      title.text(parseInt(diff/1000, 10));
       if (mobMinutes && diff > mobMinutes * 60 * 1000) {
           if (notifications) {
-              if (!lastNotificationTime || now - lastNotificationTime > 10000) {
+              if (!lastNotificationTime || now - lastNotificationTime > 30000) {
                   new Notification("Mob session is over.  Change drivers.");
                   lastNotificationTime = new Date();
               }
