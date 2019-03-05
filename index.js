@@ -1,6 +1,7 @@
   $(function() {
     
     let notifications = false;
+    let lastNotificationTime = null;
     
     if ("Notification" in window) {
         if (Notification.permission === "granted") {
@@ -56,11 +57,15 @@
     });
     
     function timer() {
-      const diff = new Date() - startTime;
+      const now = new Date();
+      const diff = now - startTime;
       title.text(diff/1000);
       if (mobMinutes && diff > mobMinutes * 60 * 1000) {
           if (notifications) {
-              new Notification("Mob session is over.  Change drivers.");
+              if (!lastNotificationTime || now - lastNotificationTime > 10000) {
+                  new Notification("Mob session is over.  Change drivers.");
+                  lastNotificationTime = new Date();
+              }
           }
           const audio = $('#easy-audio')[0];
           audio.play();
