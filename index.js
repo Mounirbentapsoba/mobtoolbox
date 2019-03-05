@@ -43,12 +43,12 @@
     $('#start-timer').click(function(){
       startTime = new Date();
       stopTime = null;
-      $('head link[rel="shortcut icon"]').attr('href', "http://herolfg.github.io/tools/timer/favicon_running.ico");
+      $('head link[rel="shortcut icon"]').attr('href', "https://gavinpalmer1984.github.io/mobtoolbox/favicon_running.ico");
       timer();
     });
     
     $('#stop-timer').click(function(){
-      $('head link[rel="shortcut icon"]').attr('href', "http://herolfg.github.io/tools/timer/favicon.ico");
+      $('head link[rel="shortcut icon"]').attr('href', "https://gavinpalmer1984.github.io/mobtoolbox/favicon.ico");
       stopTime = new Date();
       updateGrid();
       updateTotal();
@@ -66,9 +66,9 @@
           audio.play();
         
           if ($('head link[rel="shortcut icon"]').attr('href').indexOf("favicon_alert_alt.ico") === -1) {
-            $('head link[rel="shortcut icon"]').attr('href', "http://herolfg.github.io/tools/timer/favicon_alert_alt.ico");
+            $('head link[rel="shortcut icon"]').attr('href', "https://gavinpalmer1984.github.io/mobtoolbox/favicon_alert_alt.ico");
           } else {
-            $('head link[rel="shortcut icon"]').attr('href', "http://herolfg.github.io/tools/timer/favicon_alert.ico");
+            $('head link[rel="shortcut icon"]').attr('href', "https://gavinpalmer1984.github.io/mobtoolbox/favicon_alert.ico");
           }
       }
       setTimeout(() => {
