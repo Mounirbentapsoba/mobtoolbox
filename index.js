@@ -29,7 +29,7 @@
         var code = e.which;
         if(code==13) {
           e.preventDefault();
-          const $li = $('<li class="mob-member"></li>');
+          const $li = $('<li class="btn mob-member"></li>');
           $li.click(function(){
             $('li.mob-member').removeClass('selected');
             $(this).addClass('selected');
