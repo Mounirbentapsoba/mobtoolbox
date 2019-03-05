@@ -2,6 +2,12 @@
     
     let notifications = false;
     let lastNotificationTime = null;
+    let mobMinutes = $('#timer-input').val();
+    let startTime = null;
+    let stopTime = null;
+    let logs = [];
+    
+    const title = $('<title></title>');
     
     if ("Notification" in window) {
         if (Notification.permission === "granted") {
@@ -15,10 +21,7 @@
         }
     }
     
-    const title = $('<title></title>');
-    let mobMinutes = $('#timer-input').val();
-    let startTime = null;
-    let stopTime = null;
+
     
     $('head').append(title);
     
@@ -50,7 +53,13 @@
     
     $('#stop-timer').click(function(){
       $('head link[rel="shortcut icon"]').attr('href', "https://gavinpalmer1984.github.io/mobtoolbox/favicon.ico");
+      const mobMember = $('#mob-members-list li.selected').text();
+      if (!mobMember) {
+        console.log('no mobMember selected');
+        return;
+      }
       stopTime = new Date();
+      logs.push({ startTime, stopTime, mobMember });
       updateGrid();
       updateTotal();
       startTime = null;
@@ -84,19 +93,20 @@
     }
     
     function updateGrid() {
-      const mobMember = $('#mob-members-list li.selected').text();
-      if (!mobMember) {
-        console.log('no mobMember selected');
-        return;
-      }
-      const row = $('<li></li>');
-      row.text(mobMember + " " + (stopTime - startTime)/1000);
-      $('.grid').append(row);
+        $('.grid').empty();
+        logs.foreach((myLog) => {
+            const row = $('<li></li>');
+            row.text(myLog.mobMember + " " + (myLog.stopTime - myLog.startTime)/1000);
+            $('.grid').append(row);
+        }
     }
     
     function updateTotal() {
-        let current = $('#total-seconds').text();
-        current = parseInt(current, 10) + (stopTime - startTime)/1000;
+        let current = 0;
+        logs.foreach((myLog) => {
+            current += (myLog.stopTime - myLog.startTime)/1000;
+        }
+        current = parseInt(current, 10);
         $('#total-seconds').text(parseInt(current, 10));
         $('#total-seconds-formatted').text(parseInt(current/3600, 10) + " hours, " + parseInt((current % 3600)/60, 10) + " minutes, " + parseInt((current % 60), 10) + " seconds");
     }
