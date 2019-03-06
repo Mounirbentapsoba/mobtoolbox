@@ -1,0 +1,26 @@
+body {
+    padding: 10px;
+}
+
+li {
+    padding: 5px;
+    max-width: 250px;
+}
+
+li.selected {
+    background: #e2e2e2;
+}
+
+.btn {
+    border: 1px solid gray;
+    max-width: 100px;
+    padding: 5px;
+    border-radius: 3px;
+    text-align: center;
+    margin: 5px;
+    cursor: pointer;
+}
+
+li.btn {
+    list-style-type: none;
+}

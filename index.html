@@ -1,46 +1,55 @@
 <head>
-    <link rel="shortcut icon" type="image/png" href="https://gavinpalmer1984.github.io/mobtoolbox/favicon.ico"/>
-    <style>
-        li {
-            padding: 5px;
-            max-width: 250px;
-        }
-        li.selected {
-            background: #e2e2e2;
-        }
-        .btn {
-            border: 1px solid gray;
-            max-width: 100px;
-            padding: 5px;
-            border-radius: 3px;
-            text-align: center;
-            margin: 5px;
-            cursor: pointer;
-        }
-        li.btn {
-            list-style-type: none;
-        }
-    </style>
+    <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="/index.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
-<h3>Mob Session Length in Minutes</h3>
-<input id="timer-input" value="10" />
-<div class="btn" id="start-timer">Start Timer</div>
-<div class="btn" id="stop-timer">Stop Timer</div>
+<body>
 
-<audio controls volume="0.5" id="easy-audio" class="audio-example">
-  <source src="https://gavinpalmer1984.github.io/mobtoolbox/easy.m4a" />
-</audio>
+    <div class="container">
 
-<h3>Mob Members</h3>
-<input type="text" id="mob-members-input"/>
-<ul id="mob-members-list">
-</ul>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="timer-input">Mob Session Length in Minutes</label>
+                    <input class="form-control" id="timer-input" value="10">
+                </div>
+            </div>
 
-<ul class="grid"></ul>
+            <div class="col-md-6 col-lg-4">
+                <label for="easy-audio">Volume Control is Useful</label>
+                <audio class="form-control" controls volume="0.5" id="easy-audio">
+                    <source src="/easy.m4a" />
+                </audio>
+            </div>
+        </div>
 
-<div id="total-seconds">0</div>
-<div id="total-seconds-formatted"></div>
+        <div class="row">
+            <div class="btn btn-primary col" id="start-timer">Start Timer</div>
+            <div class="btn btn-primary col" id="stop-timer">Stop Timer</div>
+            <div class="btn" id="build-url">Build URL</div>
+        </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://gavinpalmer1984.github.io/mobtoolbox/index.js"></script>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="mob-members-input">Mob Members</label>
+                    <input class="form-control" id="mob-members-input">
+                </div>
+            </div>
+        </div>
+
+        <ul id="mob-members-list"></ul>
+
+        <table class="table" id="logs"></table>
+    
+        <div id="total-seconds">0</div>
+        <div id="total-seconds-formatted"></div>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/index.js"></script>
+
+</body>

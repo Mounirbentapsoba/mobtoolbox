@@ -18,34 +18,27 @@
     });
       
     $('#build-url').click(() => {
-        debugger;
-        console.log(encodeURI(JSON.stringify(logs)));
+        console.log(window.location.host + "?logs=" + encodeURI(JSON.stringify(logs)));
     });
     
     $('#mob-members-input').keyup(function(e){ 
         var code = e.which;
         if(code==13) {
           e.preventDefault();
-          const $li = $('<li class="btn mob-member"></li>');
-          $li.click(function(){
-            $('li.mob-member').removeClass('selected');
-            $(this).addClass('selected');
-          });
-          $li.html($(this).val());
+          addMember($(this).val());
           $(this).val('');
-          $("#mob-members-list").append($li);
         }
     });
     
     $('#start-timer').click(function(){
       startTime = new Date();
       stopTime = null;
-      $('head link[rel="shortcut icon"]').attr('href', "https://gavinpalmer1984.github.io/mobtoolbox/favicon_running.ico");
+      $('head link[rel="shortcut icon"]').attr('href', "/favicon_running.ico");
       timer();
     });
     
     $('#stop-timer').click(function(){
-      $('head link[rel="shortcut icon"]').attr('href', "https://gavinpalmer1984.github.io/mobtoolbox/favicon.ico");
+      $('head link[rel="shortcut icon"]').attr('href', "/favicon.ico");
       const mobMember = $('#mob-members-list li.selected').text();
       if (!mobMember) {
         console.log('no mobMember selected');
@@ -53,8 +46,7 @@
       }
       stopTime = new Date();
       logs.push({ startTime, stopTime, mobMember });
-      updateGrid();
-      updateTotal();
+      updateFromLogs();
       startTime = null;
     });
     
@@ -78,7 +70,16 @@
     }
       
     function initializeLogs() {
-        debugger;
+        const args = window.location.search.replace("?", "").split("&");
+        args.forEach((arg) => {
+          keyVal = arg.split("=");
+          if (keyVal[0] === "logs") {
+            logs = JSON.parse(decodeURI(keyVal[1]));
+            sanitizeLogDates();
+            updateMembers();
+            updateFromLogs();
+          }
+        });
     }
     
     function timer() {
@@ -96,9 +97,9 @@
           audio.play();
         
           if ($('head link[rel="shortcut icon"]').attr('href').indexOf("favicon_alert_alt.ico") === -1) {
-            $('head link[rel="shortcut icon"]').attr('href', "https://gavinpalmer1984.github.io/mobtoolbox/favicon_alert_alt.ico");
+            $('head link[rel="shortcut icon"]').attr('href', "/favicon_alert_alt.ico");
           } else {
-            $('head link[rel="shortcut icon"]').attr('href', "https://gavinpalmer1984.github.io/mobtoolbox/favicon_alert.ico");
+            $('head link[rel="shortcut icon"]').attr('href', "/favicon_alert.ico");
           }
       }
       setTimeout(() => {
@@ -107,13 +108,59 @@
         }
       }, 500);
     }
+
+    function sanitizeLogDates() {
+      logs.forEach((log) => {
+        log.startTime = new Date(log.startTime);
+        log.stopTime = new Date(log.stopTime);
+      });
+    }
+
+    function updateMembers() {
+      $("#mob-members-list").empty();
+      logs.forEach((log) => {
+        addMember(log.mobMember);
+      });
+    }
+
+    function addMember(name) {
+      const $li = $('<li class="btn mob-member"></li>');
+      $li.click(function(){
+        $('li.mob-member').removeClass('selected');
+        $(this).addClass('selected');
+      });
+      $li.html(name);
+      $("#mob-members-list").append($li);
+    }
+
+    function updateFromLogs() {
+      updateGrid();
+      updateTotal();
+    }
     
     function updateGrid() {
-        $('.grid').empty();
+        const $table = $('#logs');
+        $table.empty();
+
+        const $head = $('<thead></thead>');
+        let $header = $('<tr></tr>');
+        $header.append('<th scope="col">Member</th>');
+        $header.append('<th scope="col">Start</th>');
+        $header.append('<th scope="col">Stop</th>');
+        $header.append('<th scope="col">Duration</th>');
+        $head.append($header);
+        $table.append($head);
+
+        const $body = $('<tbody></tbody>');
+        $table.append($body);
+
         logs.forEach((myLog) => {
-            const row = $('<li></li>');
-            row.text(myLog.mobMember + " " + (myLog.stopTime - myLog.startTime)/1000);
-            $('.grid').append(row);
+          let $row = $('<tr></tr>');
+          $row.append(`<th scope="row">${myLog.mobMember}</th>`);
+          $row.append(`<td>${myLog.startTime.toISOString()}</td>`);
+          $row.append(`<td>${myLog.stopTime.toISOString()}</td>`);
+          $row.append(`<td>${formatSeconds((myLog.stopTime - myLog.startTime)/1000)}</td>`);
+          $body.append($row);
         });
     }
     
@@ -123,8 +170,25 @@
             current += (myLog.stopTime - myLog.startTime)/1000;
         });
         current = parseInt(current, 10);
-        $('#total-seconds').text(parseInt(current, 10));
-        $('#total-seconds-formatted').text(parseInt(current/3600, 10) + " hours, " + parseInt((current % 3600)/60, 10) + " minutes, " + parseInt((current % 60), 10) + " seconds");
+        $('#total-seconds').text('total seconds: ' + parseInt(current, 10));
+        $('#total-seconds-formatted').text(formatSeconds(current));
+    }
+
+    function formatSeconds(totalSeconds) {
+      const hours = parseInt(totalSeconds/3600, 10);
+      const minutes = parseInt((totalSeconds % 3600)/60, 10);
+      const seconds = parseInt((totalSeconds % 60), 10);
+      let result = "";
+      if (hours) {
+        result += `${hours} hours, `;
+      }
+      if (minutes) {
+        result += `${minutes} minutes, `;
+      }
+      if (seconds) {
+        result += `${seconds} seconds`;
+      }
+      return result;
     }
 
   });
