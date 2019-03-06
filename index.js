@@ -8,25 +8,18 @@
     let logs = [];
     
     const title = $('<title></title>');
-    
-    if ("Notification" in window) {
-        if (Notification.permission === "granted") {
-            notifications = true;
-        } else if (Notification.permission !== "denied") {
-            Notification.requestPermission().then(function (permission) {
-                if (permission === "granted") {
-                    notifications = true;
-                }
-            });
-        }
-    }
-    
 
-    
+    init();
+
     $('head').append(title);
     
     $('#timer-input').change(() => {
         mobMinutes = $('#timer-input').val();
+    });
+      
+    $('#build-url").click(() => {
+        debugger;
+        console.log(encodeURI(JSON.stringify(logs)));
     });
     
     $('#mob-members-input').keyup(function(e){ 
@@ -64,6 +57,29 @@
       updateTotal();
       startTime = null;
     });
+    
+    function init() {
+        initializeNotifications();
+        initializeLogs();
+    }
+
+    function inititializeNotifications() {
+        if ("Notification" in window) {
+            if (Notification.permission === "granted") {
+                notifications = true;
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(function (permission) {
+                    if (permission === "granted") {
+                        notifications = true;
+                    }
+                });
+            }
+        }
+    }
+      
+    function initializeLogs() {
+        debugger;
+    }
     
     function timer() {
       const now = new Date();
