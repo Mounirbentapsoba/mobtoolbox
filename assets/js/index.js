@@ -1,27 +1,27 @@
   $(function() {
-    
+
     let notifications = false;
     let lastNotificationTime = null;
     let mobMinutes = $('#timer-input').val();
     let startTime = null;
     let stopTime = null;
     let logs = [];
-    
+
     const title = $('<title></title>');
 
     init();
 
     $('head').append(title);
-    
+
     $('#timer-input').change(() => {
         mobMinutes = $('#timer-input').val();
     });
-      
+
     $('#build-url').click(() => {
-        console.log(window.location.host + "?logs=" + encodeURI(JSON.stringify(logs)));
+        console.log(window.location.host + window.location.pathname + "?logs=" + encodeURI(JSON.stringify(logs)));
     });
-    
-    $('#mob-members-input').keyup(function(e){ 
+
+    $('#mob-members-input').keyup(function(e){
         var code = e.which;
         if(code==13) {
           e.preventDefault();
@@ -29,14 +29,14 @@
           $(this).val('');
         }
     });
-    
+
     $('#start-timer').click(function(){
       startTime = new Date();
       stopTime = null;
       $('head link[rel="shortcut icon"]').attr('href', "assets/images/favicon_running.ico");
       timer();
     });
-    
+
     $('#stop-timer').click(function(){
       $('head link[rel="shortcut icon"]').attr('href', "assets/images/favicon.ico");
       const mobMember = $('#mob-members-list li.selected').text();
@@ -49,7 +49,7 @@
       updateFromLogs();
       startTime = null;
     });
-    
+
     function init() {
         initializeNotifications();
         initializeLogs();
@@ -68,7 +68,7 @@
             }
         }
     }
-      
+
     function initializeLogs() {
         const args = window.location.search.replace("?", "").split("&");
         args.forEach((arg) => {
@@ -81,7 +81,7 @@
           }
         });
     }
-    
+
     function timer() {
       const now = new Date();
       const diff = now - startTime;
@@ -95,7 +95,7 @@
           }
           const audio = $('#easy-audio')[0];
           audio.play();
-        
+
           if ($('head link[rel="shortcut icon"]').attr('href').indexOf("favicon_alert_alt.ico") === -1) {
             $('head link[rel="shortcut icon"]').attr('href', "assets/images/favicon_alert_alt.ico");
           } else {
@@ -137,7 +137,7 @@
       updateGrid();
       updateTotal();
     }
-    
+
     function updateGrid() {
         const $table = $('#logs');
         $table.empty();
@@ -163,7 +163,7 @@
           $body.append($row);
         });
     }
-    
+
     function updateTotal() {
         let current = 0;
         logs.forEach((myLog) => {
