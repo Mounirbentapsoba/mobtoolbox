@@ -33,12 +33,12 @@
     $('#start-timer').click(function(){
       startTime = new Date();
       stopTime = null;
-      $('head link[rel="shortcut icon"]').attr('href', "/favicon_running.ico");
+      $('head link[rel="shortcut icon"]').attr('href', "assets/images/favicon_running.ico");
       timer();
     });
     
     $('#stop-timer').click(function(){
-      $('head link[rel="shortcut icon"]').attr('href', "/favicon.ico");
+      $('head link[rel="shortcut icon"]').attr('href', "assets/images/favicon.ico");
       const mobMember = $('#mob-members-list li.selected').text();
       if (!mobMember) {
         console.log('no mobMember selected');
@@ -97,9 +97,9 @@
           audio.play();
         
           if ($('head link[rel="shortcut icon"]').attr('href').indexOf("favicon_alert_alt.ico") === -1) {
-            $('head link[rel="shortcut icon"]').attr('href', "/favicon_alert_alt.ico");
+            $('head link[rel="shortcut icon"]').attr('href', "assets/images/favicon_alert_alt.ico");
           } else {
-            $('head link[rel="shortcut icon"]').attr('href', "/favicon_alert.ico");
+            $('head link[rel="shortcut icon"]').attr('href', "assets/images/favicon_alert.ico");
           }
       }
       setTimeout(() => {
