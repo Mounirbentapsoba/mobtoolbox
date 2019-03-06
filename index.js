@@ -94,7 +94,7 @@
     
     function updateGrid() {
         $('.grid').empty();
-        logs.foreach((myLog) => {
+        logs.forEach((myLog) => {
             const row = $('<li></li>');
             row.text(myLog.mobMember + " " + (myLog.stopTime - myLog.startTime)/1000);
             $('.grid').append(row);
@@ -103,7 +103,7 @@
     
     function updateTotal() {
         let current = 0;
-        logs.foreach((myLog) => {
+        logs.forEach((myLog) => {
             current += (myLog.stopTime - myLog.startTime)/1000;
         });
         current = parseInt(current, 10);
