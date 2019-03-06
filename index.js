@@ -17,7 +17,7 @@
         mobMinutes = $('#timer-input').val();
     });
       
-    $('#build-url").click(() => {
+    $('#build-url').click(() => {
         debugger;
         console.log(encodeURI(JSON.stringify(logs)));
     });
