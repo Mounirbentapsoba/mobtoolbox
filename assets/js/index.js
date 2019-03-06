@@ -118,8 +118,12 @@
 
     function updateMembers() {
       $("#mob-members-list").empty();
+      const members = {};
       logs.forEach((log) => {
-        addMember(log.mobMember);
+        members[log.mobMember] = true;
+      });
+      Object.keys(members).forEach((member) => {
+        addMember(member);
       });
     }
 
