@@ -63,7 +63,7 @@
         initializeLogs();
     }
 
-    function inititializeNotifications() {
+    function initializeNotifications() {
         if ("Notification" in window) {
             if (Notification.permission === "granted") {
                 notifications = true;
