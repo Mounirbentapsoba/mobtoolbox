@@ -98,14 +98,14 @@
             const row = $('<li></li>');
             row.text(myLog.mobMember + " " + (myLog.stopTime - myLog.startTime)/1000);
             $('.grid').append(row);
-        }
+        });
     }
     
     function updateTotal() {
         let current = 0;
         logs.foreach((myLog) => {
             current += (myLog.stopTime - myLog.startTime)/1000;
-        }
+        });
         current = parseInt(current, 10);
         $('#total-seconds').text(parseInt(current, 10));
         $('#total-seconds-formatted').text(parseInt(current/3600, 10) + " hours, " + parseInt((current % 3600)/60, 10) + " minutes, " + parseInt((current % 60), 10) + " seconds");
