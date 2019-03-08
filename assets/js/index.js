@@ -92,6 +92,8 @@
             sanitizeLogDates();
             updateMembers();
             updateFromLogs();
+          } else {
+            logs = [];
           }
         }
     }
