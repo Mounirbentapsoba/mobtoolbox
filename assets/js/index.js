@@ -88,9 +88,11 @@
 
         if (!logs.length) {
           logs = JSON.parse(localStorage.getItem('logs'));
-          sanitizeLogDates();
-          updateMembers();
-          updateFromLogs();
+          if (logs) {
+            sanitizeLogDates();
+            updateMembers();
+            updateFromLogs();
+          }
         }
     }
 
