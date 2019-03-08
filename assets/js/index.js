@@ -74,12 +74,24 @@
         args.forEach((arg) => {
           keyVal = arg.split("=");
           if (keyVal[0] === "logs") {
+            backup = localStorage.getItem('logs');
+            const now = new Date();
+            const key = `logs_backup_${now.toISOString()}`;
+            localStorage.setItem(key, backup);
+            console.log(`we did a backup in localStorage just in case with key:${key}`);
             logs = JSON.parse(decodeURI(keyVal[1]));
             sanitizeLogDates();
             updateMembers();
             updateFromLogs();
           }
         });
+
+        if (!logs.length) {
+          logs = JSON.parse(localStorage.getItem('logs'));
+          sanitizeLogDates();
+          updateMembers();
+          updateFromLogs();
+        }
     }
 
     function timer() {
@@ -138,6 +150,7 @@
     }
 
     function updateFromLogs() {
+      localStorage.setItem('logs', JSON.stringify(logs));
       updateGrid();
       updateTotal();
     }
@@ -164,7 +177,7 @@
           $row.append(`<td>${myLog.startTime.toISOString()}</td>`);
           $row.append(`<td>${myLog.stopTime.toISOString()}</td>`);
           $row.append(`<td>${formatSeconds((myLog.stopTime - myLog.startTime)/1000)}</td>`);
-          $body.append($row);
+          $body.prepend($row);
         });
     }
 
