@@ -23,7 +23,7 @@ export const DriveNowView = Backbone.View.extend({
             });
 
             $('#build-url').click(() => {
-                console.log(window.location.host + window.location.pathname + "?logs=" + encodeURI(JSON.stringify(logs)));
+                console.log(window.location.host + window.location.pathname + "?logs=" + encodeURI(JSON.stringify(this.logs)));
             });
 
             const $memberInput = $('#mob-members-input');
@@ -169,7 +169,7 @@ export const DriveNowView = Backbone.View.extend({
     },
 
     updateFromLogs() {
-        localStorage.setItem('logs', JSON.stringify(logs));
+        localStorage.setItem('logs', JSON.stringify(this.logs));
         this.updateGrid();
         this.updateTotal();
     },
