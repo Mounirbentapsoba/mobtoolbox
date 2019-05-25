@@ -24,3 +24,7 @@ li.selected {
 li.btn {
     list-style-type: none;
 }
+
+.form-control {
+    min-width: 340px;
+}

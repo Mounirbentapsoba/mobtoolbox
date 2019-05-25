@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="col">
+        <div class="btn btn-secondary float-right disabled">Save Log</div>
+        <div class="btn btn-secondary float-right disabled">Load Log</div>
+        <div class="btn btn-secondary float-right" id="build-url">Build URL</div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="timer-input">Mob Session Length in Minutes</label>
+            <input class="form-control" id="timer-input" value="10">
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="easy-audio">Volume Control is Useful</label>
+            <audio class="form-control" controls volume="0.5" id="easy-audio">
+                <source src="assets/audio/easy.m4a" />
+            </audio>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="btn btn-primary col" id="start-timer">Start Timer</div>
+    <div class="btn btn-primary col" id="stop-timer">Stop Timer</div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="mob-members-input">Mob Members</label>
+            <input class="form-control" id="mob-members-input">
+        </div>
+    </div>
+</div>
+
+<ul id="mob-members-list"></ul>
+
+<table class="table table-dark" id="logs"></table>
+
+<div id="total-seconds">0</div>
+<div id="total-seconds-formatted"></div>
