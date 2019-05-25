@@ -6,25 +6,28 @@ import {
     DriveNowView
 } from './views/DriveNowView/DriveNowView.js';
 
+import {
+    DriverLogsView
+} from './views/DriverLogsView/DriverLogsView.js';
+
 const App = {
     routes: {
-        'drive-now': new DriveNowView()
+        '#drive-now': new DriveNowView(),
+        '#driver-logs': new DriverLogsView()
     },
 
     init() {
-        this.navModel = new Backbone.Model('route', 'drive-now');
-
-        _.each(this.routes, (view, route) => {
-            view.listenTo(this.navModel, "change", () => {
-                if (this.navModel.get('route') === route) {
-                    view.render();
-                } else {
-                    view.remove();
-                }
-            });
+        this.navModel = new Backbone.Model();
+        this.navModel.on("change", (model) => {
+            this.routes[model.get('route')].render();
         });
 
-        this.nav = new NavbarView(this.navModel);
+        let startRoute = '#drive-now';
+        if (window.location.hash) {
+            startRoute = window.location.hash;
+        }
+
+        this.nav = new NavbarView(this.navModel, startRoute);
         this.nav.render();
     }
 };

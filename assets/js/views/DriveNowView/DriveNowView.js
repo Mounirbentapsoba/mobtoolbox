@@ -21,6 +21,18 @@ export const DriveNowView = Backbone.View.extend({
         const now = new Date();
         const key = `logs_backup_${now.toISOString()}`;
         localStorage.setItem(key, backup);
+
+        let backups = JSON.parse(localStorage.getItem('logs_backups'));
+        if (!backups || !backups.length) {
+            backups = [];
+        }
+
+        const historical = {
+            logs: JSON.parse(backup),
+            key: now.toISOString()
+        };
+        backups.push(historical);
+        localStorage.setItem('logs_backups', JSON.stringify(backups));
     },
     clearLogs() {
         this.logs = [];
@@ -28,60 +40,64 @@ export const DriveNowView = Backbone.View.extend({
     },
     render() {
         TemplateService.getTemplate(this.template).then((html) => {
-
             $(this.el).html(_.template(html));
-            $('head').append(this.title);
-
-            $('#timer-input').change(() => {
-                this.mobMinutes = $('#timer-input').val();
-            });
-
-            $('#build-url').click(() => {
-                console.log(window.location.host + window.location.pathname + "?logs=" + encodeURI(JSON.stringify(this.logs)));
-            });
-
-            const $memberInput = $('#mob-members-input');
-            $memberInput.keyup((e) => {
-                var code = e.which;
-                if (code == 13) {
-                    e.preventDefault();
-                    this.addMember($memberInput.val());
-                    $memberInput.val('');
-                }
-            });
-
-            $('#start-timer').click(() => {
-                this.startTime = new Date();
-                this.stopTime = null;
-                $('head link[rel="shortcut icon"]').attr('href', "assets/images/favicon_running.ico");
-                this.timer();
-            });
-
-            $('#stop-timer').click(() => {
-                $('head link[rel="shortcut icon"]').attr('href', "assets/images/favicon.ico");
-                const mobMember = $('#mob-members-list li.selected').text();
-                if (!mobMember) {
-                    console.log('no mobMember selected');
-                    return;
-                }
-
-                this.stopTime = new Date();
-                this.logs.push({
-                    startTime: this.startTime,
-                    stopTime: this.stopTime,
-                    mobMember
-                });
-
-                this.updateFromLogs();
-                this.startTime = null;
-            });
-
+            this.oldRender();
             this.initializeNotifications();
             this.initializeLogs();
 
         });
-
         return this;
+    },
+
+    oldRender() {
+        $('head').append(this.title);
+
+        $('#timer-input').change(() => {
+            this.mobMinutes = $('#timer-input').val();
+        });
+
+        $('#build-url').click(() => {
+            console.log(window.location.host + window.location.pathname + "?logs=" + encodeURI(JSON.stringify(this.logs)));
+        });
+
+        const $memberInput = $('#mob-members-input');
+        $memberInput.keyup((e) => {
+            var code = e.which;
+            if (code == 13) {
+                e.preventDefault();
+                this.addMember($memberInput.val());
+                $memberInput.val('');
+            }
+        });
+
+        $('#start-timer').click(() => {
+            this.startTime = new Date();
+            this.stopTime = null;
+            $('head link[rel="shortcut icon"]').attr('href', "assets/images/favicon_running.ico");
+            this.timer();
+        });
+
+        $('#stop-timer').click(() => {
+            $('head link[rel="shortcut icon"]').attr('href', "assets/images/favicon.ico");
+            const mobMember = $('#mob-members-list li.selected').text();
+            if (!mobMember) {
+                console.log('no mobMember selected');
+                return;
+            }
+            if (!this.logs || !this.logs.length) {
+                this.logs = [];
+            }
+
+            this.stopTime = new Date();
+            this.logs.push({
+                startTime: this.startTime,
+                stopTime: this.stopTime,
+                mobMember
+            });
+
+            this.updateFromLogs();
+            this.startTime = null;
+        });
     },
 
     initializeNotifications() {
@@ -209,7 +225,7 @@ export const DriveNowView = Backbone.View.extend({
             $row.append(`<th scope="row">${myLog.mobMember}</th>`);
             $row.append(`<td>${myLog.startTime.toISOString()}</td>`);
             $row.append(`<td>${myLog.stopTime.toISOString()}</td>`);
-            $row.append(`<td>${this.formatSeconds((myLog.stopTime - myLog.startTime)/1000)}</td>`);
+            $row.append(`<td>${TemplateService.formatSeconds((myLog.stopTime - myLog.startTime)/1000)}</td>`);
             $body.prepend($row);
         });
     },
@@ -221,24 +237,7 @@ export const DriveNowView = Backbone.View.extend({
         });
         current = parseInt(current, 10);
         $('#total-seconds').text('total seconds: ' + parseInt(current, 10));
-        $('#total-seconds-formatted').text(this.formatSeconds(current));
-    },
-
-    formatSeconds(totalSeconds) {
-        const hours = parseInt(totalSeconds / 3600, 10);
-        const minutes = parseInt((totalSeconds % 3600) / 60, 10);
-        const seconds = parseInt((totalSeconds % 60), 10);
-        let result = "";
-        if (hours) {
-            result += `${hours} hours, `;
-        }
-        if (minutes) {
-            result += `${minutes} minutes, `;
-        }
-        if (seconds) {
-            result += `${seconds} seconds`;
-        }
-        return result;
+        $('#total-seconds-formatted').text(TemplateService.formatSeconds(current));
     }
 
 });
