@@ -12,6 +12,20 @@ export const DriveNowView = Backbone.View.extend({
     logs: [],
     title: $('<title></title>'),
     template: 'views/DriveNowView/DriveNowView.html',
+    events: {
+        'click .save-log': 'saveLogs',
+        'click .new-log': 'clearLogs'
+    },
+    saveLogs() {
+        const backup = localStorage.getItem('logs');
+        const now = new Date();
+        const key = `logs_backup_${now.toISOString()}`;
+        localStorage.setItem(key, backup);
+    },
+    clearLogs() {
+        this.logs = [];
+        this.updateFromLogs();
+    },
     render() {
         TemplateService.getTemplate(this.template).then((html) => {
 
