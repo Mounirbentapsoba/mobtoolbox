@@ -10,10 +10,15 @@ import {
     DriverLogsView
 } from './views/DriverLogsView/DriverLogsView.js';
 
+import {
+    MobDirectoryView
+} from './views/MobDirectoryView/MobDirectoryView.js';
+
 const App = {
     routes: {
         '#drive-now': new DriveNowView(),
-        '#driver-logs': new DriverLogsView()
+        '#driver-logs': new DriverLogsView(),
+        '#mob-directory': new MobDirectoryView()
     },
 
     init() {

@@ -7,7 +7,8 @@ export const NavbarView = Backbone.View.extend({
     template: 'views/NavbarView/NavbarView.html',
     events: {
         'click .nav-link[href="#drive-now"]': 'showDriveNow',
-        'click .nav-link[href="#driver-logs"]': 'showDriverLogs'
+        'click .nav-link[href="#driver-logs"]': 'showDriverLogs',
+        'click .nav-link[href="#mob-directory"]': 'showMobDirectory'
     },
     initialize(model, startRoute) {
         this.model = model;
@@ -18,6 +19,9 @@ export const NavbarView = Backbone.View.extend({
     },
     showDriverLogs() {
         this.model.set('route', '#driver-logs');
+    },
+    showMobDirectory() {
+        this.model.set('route', '#mob-directory');
     },
     render() {
         MobService.getTemplate(this.template).then((html) => {

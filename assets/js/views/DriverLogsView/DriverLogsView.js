@@ -62,7 +62,7 @@ export const DriverLogsView = Backbone.View.extend({
         });
     },
 
-    renderGrid(logs) {
+    renderGrid(records) {
         const $table = $('.selected-log', this.$el);
         $table.empty();
 
@@ -78,7 +78,7 @@ export const DriverLogsView = Backbone.View.extend({
         const $body = $('<tbody></tbody>');
         $table.append($body);
 
-        logs.forEach((myLog) => {
+        records.forEach((myLog) => {
             let $row = $('<tr></tr>');
             $row.append(`<th scope="row">${myLog.mobMember}</th>`);
             $row.append(`<td>${myLog.startTime}</td>`);
