@@ -1,6 +1,6 @@
 import {
-    TemplateService
-} from '/assets/js/services/TemplateService/TemplateService.js';
+    MobService
+} from '/assets/js/services/MobService/MobService.js';
 
 export const NavbarView = Backbone.View.extend({
     el: '.NavbarView',
@@ -20,7 +20,7 @@ export const NavbarView = Backbone.View.extend({
         this.model.set('route', '#driver-logs');
     },
     render() {
-        TemplateService.getTemplate(this.template).then((html) => {
+        MobService.getTemplate(this.template).then((html) => {
             $(this.el).html(_.template(html));
             this.model.set('route', this.startRoute);
         });

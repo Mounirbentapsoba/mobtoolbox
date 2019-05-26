@@ -1,6 +1,6 @@
 import {
-    TemplateService
-} from '/assets/js/services/TemplateService/TemplateService.js';
+    MobService
+} from '/assets/js/services/MobService/MobService.js';
 
 export const DriveNowView = Backbone.View.extend({
     el: '#main',
@@ -39,7 +39,7 @@ export const DriveNowView = Backbone.View.extend({
         this.updateFromLogs();
     },
     render() {
-        TemplateService.getTemplate(this.template).then((html) => {
+        MobService.getTemplate(this.template).then((html) => {
             $(this.el).html(_.template(html));
             this.oldRender();
             this.initializeNotifications();
@@ -225,7 +225,7 @@ export const DriveNowView = Backbone.View.extend({
             $row.append(`<th scope="row">${myLog.mobMember}</th>`);
             $row.append(`<td>${myLog.startTime.toISOString()}</td>`);
             $row.append(`<td>${myLog.stopTime.toISOString()}</td>`);
-            $row.append(`<td>${TemplateService.formatSeconds((myLog.stopTime - myLog.startTime)/1000)}</td>`);
+            $row.append(`<td>${MobService.formatSeconds((myLog.stopTime - myLog.startTime)/1000)}</td>`);
             $body.prepend($row);
         });
     },
@@ -237,7 +237,7 @@ export const DriveNowView = Backbone.View.extend({
         });
         current = parseInt(current, 10);
         $('#total-seconds').text('total seconds: ' + parseInt(current, 10));
-        $('#total-seconds-formatted').text(TemplateService.formatSeconds(current));
+        $('#total-seconds-formatted').text(MobService.formatSeconds(current));
     }
 
 });

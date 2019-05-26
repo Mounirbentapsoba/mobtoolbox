@@ -1,6 +1,6 @@
 import {
-    TemplateService
-} from '/assets/js/services/TemplateService/TemplateService.js';
+    MobService
+} from '/assets/js/services/MobService/MobService.js';
 
 export const DriverLogsView = Backbone.View.extend({
     el: '#main',
@@ -14,7 +14,7 @@ export const DriverLogsView = Backbone.View.extend({
             return this;
         }
 
-        TemplateService.getTemplate(this.template).then((html) => {
+        MobService.getTemplate(this.template).then((html) => {
             this.templateCache = _.template(html);
             this.doRender();
         });
@@ -83,7 +83,7 @@ export const DriverLogsView = Backbone.View.extend({
             $row.append(`<th scope="row">${myLog.mobMember}</th>`);
             $row.append(`<td>${myLog.startTime}</td>`);
             $row.append(`<td>${myLog.stopTime}</td>`);
-            $row.append(`<td>${TemplateService.formatSeconds((new Date(myLog.stopTime) - new Date(myLog.startTime))/1000)}</td>`);
+            $row.append(`<td>${MobService.formatSeconds((new Date(myLog.stopTime) - new Date(myLog.startTime))/1000)}</td>`);
             $body.prepend($row);
         });
     }
