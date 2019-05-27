@@ -2,9 +2,9 @@
 
 export const MobService = {
     cache: {},
-    root: '/assets/js',
+    root: 'assets/js',
     getTemplate(url) {
-        return $.get(`${this.root}/${url}`);
+        return $.get(`${window.location.pathname}${this.root}/${url}`);
     },
     formatSeconds(totalSeconds) {
         if (totalSeconds < 1) {
