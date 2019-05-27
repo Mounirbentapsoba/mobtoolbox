@@ -1,6 +1,6 @@
 import {
-    TemplateService
-} from '/assets/js/services/TemplateService/TemplateService.js';
+    MobService
+} from '/assets/js/services/MobService/MobService.js';
 
 export const DriveNowView = Backbone.View.extend({
     el: '#main',
@@ -10,6 +10,10 @@ export const DriveNowView = Backbone.View.extend({
     startTime: null,
     stopTime: null,
     logs: [],
+    mobsMap: JSON.parse(localStorage.getItem('mobs')),
+    mobs() {
+        return Object.keys(this.mobsMap);
+    },
     title: $('<title></title>'),
     template: 'views/DriveNowView/DriveNowView.html',
     events: {
@@ -38,15 +42,30 @@ export const DriveNowView = Backbone.View.extend({
         this.logs = [];
         this.updateFromLogs();
     },
+
     render() {
-        TemplateService.getTemplate(this.template).then((html) => {
+        MobService.getTemplate(this.template).then((html) => {
             $(this.el).html(_.template(html));
+            this.renderMobDropdown();
             this.oldRender();
             this.initializeNotifications();
             this.initializeLogs();
-
         });
         return this;
+    },
+
+    renderMobDropdown() {
+        const $drop = $('.mobs-dropdown .dropdown-menu', this.$el);
+        this.mobs().forEach((mob) => {
+            const $a = $(`<a class="dropdown-item" href="#">${mob}</a>`);
+            $drop.append($a);
+            $a.click(() => {
+                $("#mob-members-list").empty();
+                this.mobsMap[mob].forEach((record) => {
+                    this.addMember(record.mobMember);
+                });
+            });
+        });
     },
 
     oldRender() {
@@ -225,7 +244,7 @@ export const DriveNowView = Backbone.View.extend({
             $row.append(`<th scope="row">${myLog.mobMember}</th>`);
             $row.append(`<td>${myLog.startTime.toISOString()}</td>`);
             $row.append(`<td>${myLog.stopTime.toISOString()}</td>`);
-            $row.append(`<td>${TemplateService.formatSeconds((myLog.stopTime - myLog.startTime)/1000)}</td>`);
+            $row.append(`<td>${MobService.formatSeconds((myLog.stopTime - myLog.startTime)/1000)}</td>`);
             $body.prepend($row);
         });
     },
@@ -237,7 +256,7 @@ export const DriveNowView = Backbone.View.extend({
         });
         current = parseInt(current, 10);
         $('#total-seconds').text('total seconds: ' + parseInt(current, 10));
-        $('#total-seconds-formatted').text(TemplateService.formatSeconds(current));
+        $('#total-seconds-formatted').text(MobService.formatSeconds(current));
     }
 
 });

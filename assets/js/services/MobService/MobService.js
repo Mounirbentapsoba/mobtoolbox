@@ -1,6 +1,6 @@
 /* globals $*/
 
-export const TemplateService = {
+export const MobService = {
     cache: {},
     root: '/assets/js',
     getTemplate(url) {
