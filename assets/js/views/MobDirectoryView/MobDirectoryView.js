@@ -4,15 +4,19 @@ import {
 
 export const MobDirectoryView = Backbone.View.extend({
     el: '#main',
-    data: [],
+    data: {},
     template: 'views/MobDirectoryView/MobDirectoryView.html',
     templateCache: null,
 
     initData() {
         this.data = JSON.parse(localStorage.getItem('mobs'));
-        if (!this.data || !this.data.length) {
-            this.data = [];
+        if (!this.data || !Object.keys(this.data).length) {
+            this.data = {};
         }
+    },
+
+    saveData() {
+        localStorage.setItem('mobs', JSON.stringify(this.data));
     },
 
     render() {
@@ -32,6 +36,7 @@ export const MobDirectoryView = Backbone.View.extend({
         $(this.el).html(this.templateCache);
         this.initData();
         this.renderMobNameInput();
+        this.renderMobMemberInput();
         this.renderKeys();
     },
 
@@ -41,12 +46,28 @@ export const MobDirectoryView = Backbone.View.extend({
             var code = e.which;
             if (code == 13) {
                 e.preventDefault();
-                this.data.push({
-                    key: $nameInput.val(),
-                    members: []
-                });
+                this.data[$nameInput.val()] = [];
                 $nameInput.val('');
                 this.renderKeys();
+                this.saveData();
+            }
+        });
+    },
+
+    renderMobMemberInput() {
+        const $member = $('#mob-members-input', this.$el);
+        $member.keyup((e) => {
+            var code = e.which;
+            if (code == 13) {
+                e.preventDefault();
+                this.data[this.currentlySelectedMob].push({
+                    mobMember: $member.val(),
+                    startTime: new Date(),
+                    stopTime: null
+                });
+                $member.val('');
+                this.renderGrid(this.data[this.currentlySelectedMob]);
+                this.saveData();
             }
         });
     },
@@ -64,44 +85,50 @@ export const MobDirectoryView = Backbone.View.extend({
         const $body = $('<tbody></tbody>');
         $table.append($body);
 
-        this.data.forEach((mob) => {
+        Object.keys(this.data).forEach((mob) => {
             let $row = $('<tr></tr>');
             $row.click(() => {
+                this.currentlySelectedMob = mob;
                 if (this.previouslySelected) {
                     this.previouslySelected.removeClass('active');
                 }
                 $row.addClass('active');
                 this.previouslySelected = $row;
-                this.renderGrid(mob.members);
+                this.renderGrid(this.data[mob]);
+                $('#mob-members-input', this.$el).attr('disabled', false);
             });
-            $row.append(`<th scope="row">${mob.key}</th>`);
+            $row.append(`<th scope="row">${mob}</th>`);
             $body.prepend($row);
         });
     },
 
     renderGrid(records) {
-        // const $table = $('.selected-log', this.$el);
-        // $table.empty();
+        const $table = $('.mob-history', this.$el);
+        $table.empty();
 
-        // const $head = $('<thead></thead>');
-        // const $header = $('<tr></tr>');
-        // $header.append('<th scope="col">Member</th>');
-        // $header.append('<th scope="col">Start</th>');
-        // $header.append('<th scope="col">Stop</th>');
-        // $header.append('<th scope="col">Duration</th>');
-        // $head.append($header);
-        // $table.append($head);
+        const $head = $('<thead></thead>');
+        const $header = $('<tr></tr>');
+        $header.append('<th scope="col">Member</th>');
+        $header.append('<th scope="col">Start</th>');
+        $header.append('<th scope="col">Stop</th>');
+        $header.append('<th scope="col">Duration</th>');
+        $head.append($header);
+        $table.append($head);
 
-        // const $body = $('<tbody></tbody>');
-        // $table.append($body);
+        const $body = $('<tbody></tbody>');
+        $table.append($body);
 
-        // logs.forEach((myLog) => {
-        //     let $row = $('<tr></tr>');
-        //     $row.append(`<th scope="row">${myLog.mobMember}</th>`);
-        //     $row.append(`<td>${myLog.startTime}</td>`);
-        //     $row.append(`<td>${myLog.stopTime}</td>`);
-        //     $row.append(`<td>${MobService.formatSeconds((new Date(myLog.stopTime) - new Date(myLog.startTime))/1000)}</td>`);
-        //     $body.prepend($row);
-        // });
+        records.forEach((myLog) => {
+            let $row = $('<tr></tr>');
+            $row.append(`<th scope="row">${myLog.mobMember}</th>`);
+            $row.append(`<td>${myLog.startTime}</td>`);
+            $row.append(`<td>${myLog.stopTime}</td>`);
+            let duration = "ongoing";
+            if (myLog.startTime && myLog.stopTime) {
+                duration = MobService.formatSeconds((new Date(myLog.stopTime) - new Date(myLog.startTime))/1000);
+            }
+            $row.append(`<td>${duration}</td>`);
+            $body.prepend($row);
+        });
     }
 });
