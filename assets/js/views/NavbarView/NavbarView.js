@@ -1,6 +1,6 @@
 import {
     MobService
-} from '/assets/js/services/MobService/MobService.js';
+} from '../../services/MobService/MobService.js';
 
 export const NavbarView = Backbone.View.extend({
     el: '.NavbarView',
