@@ -10,6 +10,10 @@ export const DriveNowView = Backbone.View.extend({
     startTime: null,
     stopTime: null,
     logs: [],
+    mobsMap: JSON.parse(localStorage.getItem('mobs')),
+    mobs() {
+        return Object.keys(this.mobsMap);
+    },
     title: $('<title></title>'),
     template: 'views/DriveNowView/DriveNowView.html',
     events: {
@@ -38,15 +42,30 @@ export const DriveNowView = Backbone.View.extend({
         this.logs = [];
         this.updateFromLogs();
     },
+
     render() {
         MobService.getTemplate(this.template).then((html) => {
             $(this.el).html(_.template(html));
+            this.renderMobDropdown();
             this.oldRender();
             this.initializeNotifications();
             this.initializeLogs();
-
         });
         return this;
+    },
+
+    renderMobDropdown() {
+        const $drop = $('.mobs-dropdown .dropdown-menu', this.$el);
+        this.mobs().forEach((mob) => {
+            const $a = $(`<a class="dropdown-item" href="#">${mob}</a>`);
+            $drop.append($a);
+            $a.click(() => {
+                $("#mob-members-list").empty();
+                this.mobsMap[mob].forEach((record) => {
+                    this.addMember(record.mobMember);
+                });
+            });
+        });
     },
 
     oldRender() {
