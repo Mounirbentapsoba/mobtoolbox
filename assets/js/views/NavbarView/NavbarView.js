@@ -14,19 +14,24 @@ export const NavbarView = Backbone.View.extend({
         this.model = model;
         this.startRoute = startRoute;
     },
+    toRoute(route) {
+        $('.nav-link').removeClass('active');
+        $(`.nav-link[href="${route}"]`).addClass('active');
+        this.model.set('route', route);
+    },
     showDriveNow() {
-        this.model.set('route', '#drive-now');
+        this.toRoute('#drive-now');
     },
     showDriverLogs() {
-        this.model.set('route', '#driver-logs');
+        this.toRoute('#driver-logs');
     },
     showMobDirectory() {
-        this.model.set('route', '#mob-directory');
+        this.toRoute('#mob-directory');
     },
     render() {
         MobService.getTemplate(this.template).then((html) => {
             $(this.el).html(_.template(html));
-            this.model.set('route', this.startRoute);
+            this.toRoute(this.startRoute);
         });
         return this;
     }
