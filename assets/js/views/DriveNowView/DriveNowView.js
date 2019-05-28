@@ -12,7 +12,7 @@ export const DriveNowView = Backbone.View.extend({
     logs: [],
     mobsMap: JSON.parse(localStorage.getItem('mobs')),
     mobs() {
-        return Object.keys(this.mobsMap);
+        return this.mobsMap ? Object.keys(this.mobsMap): [];
     },
     title: $('<title></title>'),
     template: 'views/DriveNowView/DriveNowView.html',
@@ -152,7 +152,7 @@ export const DriveNowView = Backbone.View.extend({
 
         if (!this.logs.length) {
             this.logs = JSON.parse(localStorage.getItem('logs'));
-            if (this.logs.length) {
+            if (this.logs && this.logs.length) {
                 this.sanitizeLogDates();
                 this.updateMembers();
                 this.updateFromLogs();
