@@ -1,6 +1,6 @@
 import {
     MobService
-} from '/assets/js/services/MobService/MobService.js';
+} from '../../services/MobService/MobService.js';
 
 export const DriverLogsView = Backbone.View.extend({
     el: '#main',
@@ -35,20 +35,11 @@ export const DriverLogsView = Backbone.View.extend({
     },
 
     renderKeys() {
-        const $table = $('.historical-logs', this.$el);
-        $table.empty();
-
-        const $head = $('<thead></thead>');
-        const $header = $('<tr></tr>');
-        $header.append('<th scope="col">Timestamp</th>');
-        $head.append($header);
-        $table.append($head);
-
-        const $body = $('<tbody></tbody>');
-        $table.append($body);
+        const $list = $('.historical-logs', this.$el);
+        $list.empty();
 
         this.data.forEach((historical) => {
-            let $row = $('<tr></tr>');
+            const $row = $(`<button type="button" class="list-group-item list-group-item-action">${historical.key}</button>`);
             $row.click(() => {
                 if (this.previouslySelected) {
                     this.previouslySelected.removeClass('active');
@@ -57,8 +48,7 @@ export const DriverLogsView = Backbone.View.extend({
                 this.previouslySelected = $row;
                 this.renderGrid(historical.logs);
             });
-            $row.append(`<th scope="row">${historical.key}</th>`);
-            $body.prepend($row);
+            $list.prepend($row);
         });
     },
 

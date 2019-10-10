@@ -1,6 +1,6 @@
 import {
     MobService
-} from '/assets/js/services/MobService/MobService.js';
+} from '../../services/MobService/MobService.js';
 
 export const MobDirectoryView = Backbone.View.extend({
     el: '#main',
@@ -73,20 +73,11 @@ export const MobDirectoryView = Backbone.View.extend({
     },
 
     renderKeys() {
-        const $table = $('.mobs', this.$el);
-        $table.empty();
-
-        const $head = $('<thead></thead>');
-        const $header = $('<tr></tr>');
-        $header.append('<th scope="col">Team Name</th>');
-        $head.append($header);
-        $table.append($head);
-
-        const $body = $('<tbody></tbody>');
-        $table.append($body);
+        const $list = $('.mobs', this.$el);
+        $list.empty();
 
         Object.keys(this.data).forEach((mob) => {
-            let $row = $('<tr></tr>');
+            const $row = $(`<button type="button" class="list-group-item list-group-item-action">${mob}</button>`);
             $row.click(() => {
                 this.currentlySelectedMob = mob;
                 if (this.previouslySelected) {
@@ -97,8 +88,7 @@ export const MobDirectoryView = Backbone.View.extend({
                 this.renderGrid(this.data[mob]);
                 $('#mob-members-input', this.$el).attr('disabled', false);
             });
-            $row.append(`<th scope="row">${mob}</th>`);
-            $body.prepend($row);
+            $list.prepend($row);
         });
     },
 
