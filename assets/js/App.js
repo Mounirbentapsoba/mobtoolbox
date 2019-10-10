@@ -14,11 +14,16 @@ import {
     MobDirectoryView
 } from './views/MobDirectoryView/MobDirectoryView.js';
 
+import {
+    DailyReportView
+} from './views/DailyReportView/DailyReportView.js';
+
 const App = {
     routes: {
         '#drive-now': new DriveNowView(),
         '#driver-logs': new DriverLogsView(),
-        '#mob-directory': new MobDirectoryView()
+        '#mob-directory': new MobDirectoryView(),
+        '#daily-report': new DailyReportView()
     },
 
     init() {
