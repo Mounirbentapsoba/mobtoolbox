@@ -28,3 +28,7 @@ li.btn {
 .form-control {
     min-width: 340px;
 }
+
+#current-report {
+    height: 600px;
+}
