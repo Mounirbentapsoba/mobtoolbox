@@ -14,7 +14,9 @@ export const DailyReportView = Backbone.View.extend({
     initData() {
         this.data = JSON.parse(localStorage.getItem('daily-reports'));
         if (!this.data || !Object.keys(this.data).length) {
-            this.data = {};
+            this.data = {
+                reports: []
+            };
         }
     },
 
