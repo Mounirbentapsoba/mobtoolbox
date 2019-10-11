@@ -30,7 +30,7 @@ export const NavbarView = Backbone.View.extend({
         this.toRoute('#mob-directory');
     },
     showDailyReport() {
-        this.model.set('route', '#daily-report');
+        this.toRoute('#daily-report');
     },
     render() {
         MobService.getTemplate(this.template).then((html) => {
