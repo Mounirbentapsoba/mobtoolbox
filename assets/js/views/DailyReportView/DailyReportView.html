@@ -1,28 +1,14 @@
 <div class="row">
-    <div class="col-md-6">
-        <div class="form-group">
-            <label for="add-question-input">Add Question</label>
-            <input class="form-control" id="add-question-input">
-        </div>
+    <div class="col-md-4">
+        <div class="btn btn-danger disabled" id="delete-report">delete</div>
+        <div id="reports" class="list-group pt-3"></div>
     </div>
-    <div class="col-md-6">
-        <div class="btn btn-primary disabled" id="generate-report">Generate Report</div>
-        <div class="btn btn-danger disabled" id="remove-all-questions">Remove All Questions</div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-6">
-        <div class="form-group">
-            <label for="add-comment-input">Add Comment</label>
-            <input class="form-control" id="add-comment-input" disabled>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="form-group" id="q-and-a-form">
+    <div class="col-md-8">
+        <div class="form-group pt-3">
+            <div class="input-group">
+                <textarea class="form-control" aria-label="With textarea" id="current-report"></textarea>
+            </div>
+            <div class="btn btn-primary" id="save-report">save</div>
         </div>
     </div>
 </div>

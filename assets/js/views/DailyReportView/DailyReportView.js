@@ -7,7 +7,10 @@ export const DailyReportView = Backbone.View.extend({
     data: {},
     template: 'views/DailyReportView/DailyReportView.html',
     templateCache: null,
-
+    events: {
+        'click #save-report': 'saveReport',
+        'click #delete-report': 'deleteReport'
+    },
     initData() {
         this.data = JSON.parse(localStorage.getItem('daily-reports'));
         if (!this.data || !Object.keys(this.data).length) {
@@ -35,36 +38,60 @@ export const DailyReportView = Backbone.View.extend({
     doRender() {
         $(this.el).html(this.templateCache);
         this.initData();
-        this.renderAddQuestionsInput();
-        this.renderQAInput();
+        this.renderReports();
     },
 
-    renderAddQuestionsInput() {
-        const $addQuestionInput = $('#add-question-input');
-        $addQuestionInput.keyup((e) => {
-            var code = e.which;
-            if (code == 13) {
-                e.preventDefault();
-                if (!this.data.questions) {
-                    this.data.questions = [];
+    renderReports() {
+        const $list = $('#reports', this.$el);
+        $list.empty();
+
+        this.data.reports.forEach((report) => {
+            const lines = report.split('\n');
+            if (lines.length === 0) {
+                return;
+            }
+            const first = report.split('\n')[0];
+            const $row = $(`<button type="button" class="list-group-item list-group-item-action">${first}</button>`);
+            $row.click(() => {
+                this.currentlySelectedReport = report;
+                if (this.previouslySelected) {
+                    this.previouslySelected.removeClass('active');
                 }
-                this.data.questions.push($addQuestionInput.val());
-                $addQuestionInput.val('');
-                this.saveData();
-                this.renderQAInput();
+                $row.addClass('active');
+                $('#delete-report').removeClass('disabled');
+                this.previouslySelected = $row;
+                $('#current-report').val(report);
+            });
+            $list.prepend($row);
+        });
+    },
+
+    saveReport() {
+        const $current = $('#current-report');
+        if (!this.data.reports) {
+            this.data.reports = [];
+        }
+        this.data.reports.push($current.val());
+        $current.val('');
+        this.saveData();
+        this.renderReports();
+    },
+
+    deleteReport() {
+        if (!this.currentlySelectedReport) {
+            return;
+        }
+        const kept = [];
+        this.data.reports.forEach((report) => {
+            if (report !== this.currentlySelectedReport) {
+                kept.push(report);
             }
         });
-    },
-
-    renderQAInput() {
-        const $qaForm = $('#q-and-a-form', this.$el);
-        $qaForm.empty();
-        this.data.questions.forEach((question, i) => {
-            const label = `<label for="answer-to-question-${i}">${question}</label>`;
-            const input = `<input class="form-control" id="answer-to-question-${i}"">`;
-            $qaForm.append(label);
-            $qaForm.append(input);
-        });
-    },
+        this.data.reports = kept;
+        this.saveData();
+        this.renderReports();
+        $('#current-report').val('');
+        $('#delete-report').addClass('disabled');
+    }
 
 });
