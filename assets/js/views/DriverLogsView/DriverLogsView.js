@@ -76,5 +76,15 @@ export const DriverLogsView = Backbone.View.extend({
             $row.append(`<td>${MobService.formatSeconds((new Date(myLog.stopTime) - new Date(myLog.startTime))/1000)}</td>`);
             $body.prepend($row);
         });
+
+        let current = 0;
+        records.forEach((myLog) => {
+            console.log('gp2', myLog);
+            current += ((new Date(myLog.stopTime)) - (new Date(myLog.startTime))) / 1000;
+        });
+        current = parseInt(current, 10);
+        console.log('gp1', current);
+        $('#total-seconds').text('total seconds: ' + parseInt(current, 10));
+        $('#total-seconds-formatted').text(MobService.formatSeconds(current));
     }
 });
