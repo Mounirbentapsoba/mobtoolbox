@@ -38,12 +38,45 @@ export const DriveNowView = Backbone.View.extend({
         backups.push(historical);
         localStorage.setItem('logs_backups', JSON.stringify(backups));
     },
+
     clearLogs() {
+        this.startTime = null;
+        this.stopTime = null;
         this.logs = [];
         this.updateFromLogs();
     },
 
+    backend() {
+        console.log('backend is available');
+        this.socket = io({
+            transports: ['websocket']
+        });
+        this.socket.on('start timer', (msg) => {
+            if (this.startTime === null) {
+                this.onStartTimer(new Date(msg.startTime));
+            }
+            if (this.logs.length === 0) {
+                this.logs = msg.logs;
+                this.updateFromLogs();
+            }
+        });
+        this.socket.on('stop timer', (msg) => {
+            if (this.logs.length === 0) {
+                this.logs = msg.logs;
+                this.updateFromLogs();
+            }
+            if (this.startTime !== null) {
+                this.onStopTimer(msg.mobMember, new Date(msg.stopTime));
+            }
+        });
+        this.socket.on('bad secret', (msg) => {
+            console.error('someone tried to use the wrong secret');
+        });
+    },
+
     render() {
+        $.get('/api/version').then((result) => this.backend(), (err) => console.error('version error', err) );
+
         MobService.getTemplate(this.template).then((html) => {
             $(this.el).html(_.template(html));
             this.renderMobDropdown();
@@ -52,6 +85,34 @@ export const DriveNowView = Backbone.View.extend({
             this.initializeLogs();
         });
         return this;
+    },
+
+    onStartTimer(startTime) {
+        this.startTime= startTime;
+        this.stopTime = null;
+        $('head link[rel="shortcut icon"]').attr('href', "assets/images/favicon_running.ico");
+        this.timer();
+        $('#start-timer').addClass('disabled');
+        $('#stop-timer').removeClass('disabled');
+    },
+
+    onStopTimer(mobMember, stopTime) {
+        $('head link[rel="shortcut icon"]').attr('href', "assets/images/favicon.ico");
+        if (!this.logs || !this.logs.length) {
+            this.logs = [];
+        }
+
+        this.stopTime = stopTime;
+        this.logs.push({
+            startTime: this.startTime,
+            stopTime: this.stopTime,
+            mobMember
+        });
+
+        this.updateFromLogs();
+        this.startTime = null;
+        $('#stop-timer').addClass('disabled');
+        $('#start-timer').removeClass('disabled');
     },
 
     renderMobDropdown() {
@@ -90,32 +151,28 @@ export const DriveNowView = Backbone.View.extend({
         });
 
         $('#start-timer').click(() => {
-            this.startTime = new Date();
-            this.stopTime = null;
-            $('head link[rel="shortcut icon"]').attr('href', "assets/images/favicon_running.ico");
-            this.timer();
+            this.onStartTimer(new Date());
+            this.socket.emit('start timer', {
+                startTime: this.startTime,
+                logs: this.logs,
+                secret: $('#secret').val()
+            });
         });
 
         $('#stop-timer').click(() => {
-            $('head link[rel="shortcut icon"]').attr('href', "assets/images/favicon.ico");
             const mobMember = $('#mob-members-list li.selected').text();
             if (!mobMember) {
                 console.log('no mobMember selected');
+                $('.toast').toast('show')
                 return;
             }
-            if (!this.logs || !this.logs.length) {
-                this.logs = [];
-            }
-
-            this.stopTime = new Date();
-            this.logs.push({
-                startTime: this.startTime,
+            this.onStopTimer(mobMember, new Date());
+            this.socket.emit('stop timer', {
+                logs: this.logs,
                 stopTime: this.stopTime,
-                mobMember
+                mobMember: mobMember,
+                secret: $('#secret').val()
             });
-
-            this.updateFromLogs();
-            this.startTime = null;
         });
     },
 
@@ -144,8 +201,6 @@ export const DriveNowView = Backbone.View.extend({
                 localStorage.setItem(key, backup);
                 console.log(`we did a backup in localStorage just in case with key:${key}`);
                 this.logs = JSON.parse(decodeURI(keyVal[1]));
-                this.sanitizeLogDates();
-                this.updateMembers();
                 this.updateFromLogs();
             }
         });
@@ -153,8 +208,6 @@ export const DriveNowView = Backbone.View.extend({
         if (!this.logs.length) {
             this.logs = JSON.parse(localStorage.getItem('logs'));
             if (this.logs && this.logs.length) {
-                this.sanitizeLogDates();
-                this.updateMembers();
                 this.updateFromLogs();
             } else {
                 this.logs = [];
@@ -219,6 +272,8 @@ export const DriveNowView = Backbone.View.extend({
 
     updateFromLogs() {
         localStorage.setItem('logs', JSON.stringify(this.logs));
+        this.sanitizeLogDates();
+        this.updateMembers();
         this.updateGrid();
         this.updateTotal();
     },

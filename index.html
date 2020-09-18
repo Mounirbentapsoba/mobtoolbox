@@ -1,52 +1,32 @@
 <html>
 
 <head>
-    <link rel="shortcut icon" type="image/png" href="assets/images/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="assets/css/index.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="shortcut icon" type="image/png" href="assets/images/favicon.ico" />
+  <link rel="stylesheet" type="text/css" href="assets/css/index.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 
 <body>
-    <!-- Load Facebook SDK for JavaScript -->
-      <div id="fb-root"></div>
-      <script>
-        window.fbAsyncInit = function() {
-          FB.init({
-            xfbml            : true,
-            version          : 'v8.0'
-          });
-        };
-        (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
-        fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));</script>
-      <!-- Your Chat Plugin code -->
-      <div class="fb-customerchat"
-        attribution=setup_tool
-        page_id="111336296905245">
-      </div>
 
-    <div class="container-fluid">
-        <div class="NavbarView"></div>
-        <div id="main"></div>
-    </div>
+  <div class="container-fluid">
+    <div class="NavbarView"></div>
+    <div id="main"></div>
+  </div>
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 
-    <script type="module" src="assets/js/services/MobService/MobService.js"></script>
-    <script type="module" src="assets/js/views/NavbarView/NavbarView.js"></script>
-    <script type="module" src="assets/js/views/DriveNowView/DriveNowView.js"></script>
-    <script type="module" src="assets/js/views/DriverLogsView/DriverLogsView.js"></script>
-    <script type="module" src="assets/js/views/MobDirectoryView/MobDirectoryView.js"></script>
-    <script type="module" src="assets/js/views/DailyReportView/DailyReportView.js"></script>
-    <script type="module" src="assets/js/App.js"></script>
+  <script type="module" src="assets/js/services/MobService/MobService.js"></script>
+  <script type="module" src="assets/js/views/NavbarView/NavbarView.js"></script>
+  <script type="module" src="assets/js/views/DriveNowView/DriveNowView.js"></script>
+  <script type="module" src="assets/js/views/DriverLogsView/DriverLogsView.js"></script>
+  <script type="module" src="assets/js/views/MobDirectoryView/MobDirectoryView.js"></script>
+  <script type="module" src="assets/js/views/DailyReportView/DailyReportView.js"></script>
+  <script type="module" src="assets/js/App.js"></script>
 </body>
 
 </html>

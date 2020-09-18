@@ -2,6 +2,10 @@ body {
     padding: 10px;
 }
 
+.hidden {
+    visibility: hidden;
+}
+
 li {
     padding: 5px;
     max-width: 250px;
@@ -25,8 +29,10 @@ li.btn {
     list-style-type: none;
 }
 
-.form-control {
-    min-width: 340px;
+.toast {
+    position: absolute;
+    right: 15px;
+    top: 15px;
 }
 
 #current-report {

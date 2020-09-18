@@ -1,9 +1,12 @@
-<div class="row">
-    <div class="col">
-        <!-- <div class="btn btn-secondary float-right" id="build-url">Build URL</div> -->
+<div class="row justify-content-end">
+    <div class="col-md-3">
+        <div class="form-group">
+            <input class="form-control" type="password" id="secret" />
+        </div>
+    </div>
+    <div class="col-md-2">
         <div class="btn btn-secondary float-right new-log">Clear</div>
         <div class="btn btn-secondary float-right save-log">Save</div>
-        <div class="btn btn-secondary float-right load-log disabled">Load</div>
     </div>
 </div>
 
@@ -27,7 +30,7 @@
 
 <div class="row">
     <div class="btn btn-primary col" id="start-timer">Start Timer</div>
-    <div class="btn btn-primary col" id="stop-timer">Stop Timer</div>
+    <div class="btn btn-primary col disabled" id="stop-timer">Stop Timer</div>
 </div>
 
 <div class="row">
@@ -52,3 +55,15 @@
 
 <div id="total-seconds">0</div>
 <div id="total-seconds-formatted"></div>
+
+<div class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+    <div class="toast-header">
+        <strong class="mr-auto">Warning</strong>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="toast-body">
+        Select a mob member before you stop the timer.
+    </div>
+</div>
